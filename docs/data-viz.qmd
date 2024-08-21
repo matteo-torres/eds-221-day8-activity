@@ -1,0 +1,72 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+# load packages
+library(tidyverse)
+library(here)
+```
+
+```{r}
+space_launches <- read_csv(here("data", "space_launches.csv"))
+```
+
+```{r}
+usa <- ggplot(data = space_launches, aes(x = launch_year, y = agency)) + 
+  geom_col(fill = "yellow") +
+  theme(panel.grid.minor = element_blank(),
+        panel.grid.major = element_line(color = "orange"),
+        panel.background = element_rect(fill = "pink")) +
+  geom_vline(xintercept = 2.4e+06, linetype = "dashed", color = "red") +
+  annotate("text", x = 2.4e+06, y = "US", label = "USA!!!", color = "blue", size = 5) +
+  labs(x = "Launch Year", y = "Agency", title = "A Clean Graph on US Space Launches")
+```
+
+```{r}
+graph <- ggplot(data = space_launches, aes(x = launch_year, y = mission, color = launch_year)) +
+  geom_point(size = 0.5, alpha = 0.5) +
+  scale_color_gradient(low = "black", high = "green") +
+  labs(x = "Launch Year",
+       y = "Mission")
+```
+
+```{r}
+ggsave(here("figs", "graph.jpg"))
+```
+
+```{r}
+ggsave(here("figs", "usa.jpg"))
+```
+
+```{r}
+sanfran <- read_csv(here("data", "San_Francisco_Communitywide_Greenhouse_Gas_Inventory.csv"))
+```
+
+```{r}
+table <- sanfran %>%
+  group_by(Sector_General) %>%
+  summarize(total_emissions = sum(Emissions_mtCO2e, na.rm = TRUE))
+```
+
+```{r}
+table2 <- sanfran %>%
+  group_by(Calendar_Year, Commodity_Type) %>%
+  summarize(total_emissions = sum(Emissions_mtCO2e, na.rm = TRUE))
+```
+
+```{r}
+ggplot(data = table, aes(x = fct_reorder(Sector_General, total_emissions), 
+                         y = total_emissions)) + 
+  geom_col() +
+  theme_classic() +
+  labs(x = "Sector General",
+       y = "CO2 Emissions (metric tons)",
+       title = "San Francisco CO2 Emissions") +
+  scale_y_continuous(breaks = seq(0, 30201000, by = 7550250))
+  
+  
+```
+
