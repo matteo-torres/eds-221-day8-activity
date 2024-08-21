@@ -58,7 +58,7 @@ table2 <- sanfran %>%
 ```
 
 ```{r}
-ggplot(data = table, aes(x = fct_reorder(Sector_General, total_emissions), 
+graph2 <- ggplot(data = table, aes(x = fct_reorder(Sector_General, total_emissions), 
                          y = total_emissions)) + 
   geom_col() +
   theme_classic() +
@@ -67,6 +67,9 @@ ggplot(data = table, aes(x = fct_reorder(Sector_General, total_emissions),
        title = "San Francisco CO2 Emissions") +
   scale_y_continuous(breaks = seq(0, 30201000, by = 7550250))
   
-  
+```
+
+```{r}
+ggsave(here("figs", "graph2.jpg"))
 ```
 
